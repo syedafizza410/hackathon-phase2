@@ -1,0 +1,45 @@
+﻿# backend/main.py
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+import os
+
+# Load environment variables
+load_dotenv()
+
+# Import routers and middleware
+from routes.tasks import router as tasks_router
+from middleware.jwt_middleware import JWTMiddleware
+
+# Create FastAPI app
+app = FastAPI(
+    title="Todo App API",
+    description="API for the Todo App Phase II",
+    version="1.0.0"
+)
+
+# Add JWT middleware for authentication
+app.add_middleware(JWTMiddleware)
+
+# Configure CORS
+frontend_url = os.getenv("FRONTEND_URL", "http://localhost:3000")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[frontend_url],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+    # Expose Authorization header to allow JWT to be read by frontend
+    expose_headers=["Access-Control-Allow-Origin", "Authorization"]
+)
+
+# Include routers
+app.include_router(tasks_router, prefix="/api/{user_id}", tags=["tasks"])
+
+@app.get("/")
+def read_root():
+    return {"message": "Todo App Backend API"}
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy", "service": "todo-backend"}
