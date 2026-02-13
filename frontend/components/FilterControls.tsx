@@ -64,12 +64,12 @@ const FilterControls: React.FC<FilterControlsProps> = ({
             id="sort-option"
             value={sortOption}
             onChange={(e) => onSortChange(e.target.value as TaskSortOption)}
-            className="w-full rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-2 text-sm"
+            className="w-full rounded-md border border-gray-300 text-gray-700 px-3 py-2 text-sm bg-white"
           >
-            <option value="created_desc">Newest First</option>
-            <option value="created_asc">Oldest First</option>
-            <option value="title_asc">Title A-Z</option>
-            <option value="title_desc">Title Z-A</option>
+            <option value="created_desc" className='bg-black'>Newest First</option>
+            <option value="created_asc" className='bg-black'>Oldest First</option>
+            <option value="title_asc" className='bg-black'>Title A-Z</option>
+            <option value="title_desc" className='bg-black'>Title Z-A</option>
           </select>
         </div>
       </div>

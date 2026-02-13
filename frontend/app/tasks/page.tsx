@@ -185,12 +185,12 @@ const TasksPage = () => {
       </main>
 
       {/* ===== MODALS ===== */}
-      <Modal isOpen={showCreateModal} onClose={() => setShowCreateModal(false)} title="Create Task">
+      <Modal isOpen={showCreateModal} onClose={() => setShowCreateModal(false)} title=''>
         <TaskForm onSubmit={handleCreateTask} onCancel={() => setShowCreateModal(false)} />
       </Modal>
 
       {editingTask && (
-        <Modal isOpen onClose={() => setEditingTask(null)} title="Edit Task">
+        <Modal isOpen onClose={() => setEditingTask(null)} title="">
           <TaskForm initialData={editingTask} onSubmit={handleUpdateTask} onCancel={() => setEditingTask(null)} />
         </Modal>
       )}

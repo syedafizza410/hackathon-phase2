@@ -90,23 +90,23 @@ const TaskForm: React.FC<TaskFormProps> = ({ initialData, onSubmit, onCancel }) 
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.3 }}
     >
-      <Card animateOnHover={false}>
-        <CardHeader>
-          <CardTitle>
+      {/* <Card animateOnHover={false}> */}
+        {/* <CardHeader> */}
+          {/* <CardTitle> */}
             {initialData ? 'Edit Task' : ''}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+          {/* </CardTitle> */}
+        {/* </CardHeader> */}
+        {/* <CardContent> */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="title">Title *</Label>
+              <Label htmlFor="title">Title </Label>
               <Input
                 id="title"
                 name="title"
                 value={formData.title}
                 onChange={handleChange}
                 placeholder="Task title"
-                className={errors.title ? 'border-red-500' : ''}
+                className={errors.title ? 'border-red-500' : 'text-black font-bold'}
               />
               {errors.title && <p className="text-sm text-red-500">{errors.title}</p>}
             </div>
@@ -119,7 +119,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ initialData, onSubmit, onCancel }) 
                 value={formData.description}
                 onChange={handleChange}
                 rows={3}
-                className={`flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 ${
+                className={`flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 font-bold text-black py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-all duration-200 ${
                   errors.description ? 'border-red-500' : ''
                 }`}
                 placeholder="Task description (optional)"
@@ -134,7 +134,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ initialData, onSubmit, onCancel }) 
 
             <div className="flex justify-end space-x-2">
               <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
-                <Button type="button" variant="outline" onClick={onCancel}>
+                <Button type="button" variant="outline" onClick={onCancel} className='text-black'>
                   Cancel
                 </Button>
               </motion.div>
@@ -145,8 +145,8 @@ const TaskForm: React.FC<TaskFormProps> = ({ initialData, onSubmit, onCancel }) 
               </motion.div>
             </div>
           </form>
-        </CardContent>
-      </Card>
+        {/* </CardContent> */}
+      {/* </Card> */}
     </motion.div>
   );
 };
