@@ -1,4 +1,3 @@
-# backend/middleware/jwt_middleware.py
 from fastapi import Request
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -11,14 +10,24 @@ logger = logging.getLogger(__name__)
 class JWTMiddleware(BaseHTTPMiddleware):
     """
     JWT middleware for Better Auth
+    Handles Authorization headers and skips preflight OPTIONS requests
     """
 
     async def dispatch(self, request: Request, call_next):
         try:
             path = request.url.path
-            logger.info(f"Processing request: {path}")
+            method = request.method
+            logger.info(f"{method} {path}")
 
-            # ---- Public routes ----
+            # ----------------
+            # ✅ ALLOW PRE-FLIGHT
+            # ----------------
+            if method == "OPTIONS":
+                return await call_next(request)
+
+            # ----------------
+            # Public routes
+            # ----------------
             if path in ["/", "/health"]:
                 return await call_next(request)
 
@@ -27,6 +36,9 @@ class JWTMiddleware(BaseHTTPMiddleware):
                 if path.startswith("/api/auth/") or path in ["/api/login", "/api/register"]:
                     return await call_next(request)
 
+                # ----------------
+                # Auth routes
+                # ----------------
                 auth_header = request.headers.get("Authorization")
                 if not auth_header or not auth_header.startswith("Bearer "):
                     return JSONResponse(
@@ -46,6 +58,9 @@ class JWTMiddleware(BaseHTTPMiddleware):
                 request.state.user_id = token_data["user_id"]
                 logger.info(f"Authenticated user: {token_data['user_id']}")
 
+            # ----------------
+            # Call next middleware / route
+            # ----------------
             return await call_next(request)
 
         except Exception as e:

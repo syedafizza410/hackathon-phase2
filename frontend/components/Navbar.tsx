@@ -22,7 +22,7 @@ const Navbar = () => {
   const closeMenu = () => setIsOpen(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-50 w-full border-b bg-gradient-to-br from-indigo-950 via-blue-900 to-purple-900">
       <div className="container flex h-16 items-center">
         <div className="flex items-center gap-4">
           <Link href="/" className="flex items-center space-x-2">
@@ -57,7 +57,7 @@ const Navbar = () => {
           {isAuthenticated && user && (
             <div className="hidden md:flex items-center gap-4">
               <motion.span 
-                className="text-sm font-medium text-muted-foreground"
+                className="text-sm font-medium text-muted-foreground text-white hover:text-black"
                 initial={{ opacity: 0, x: 10 }}
                 animate={{ opacity: 1, x: 0 }}
               >
@@ -70,7 +70,7 @@ const Navbar = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={handleLogout}
+                  onClick={handleLogout} className='bg-black text-white'
                 >
                   Logout
                 </Button>

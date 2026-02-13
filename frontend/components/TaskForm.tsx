@@ -93,7 +93,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ initialData, onSubmit, onCancel }) 
       <Card animateOnHover={false}>
         <CardHeader>
           <CardTitle>
-            {initialData ? 'Edit Task' : 'Create New Task'}
+            {initialData ? 'Edit Task' : ''}
           </CardTitle>
         </CardHeader>
         <CardContent>
