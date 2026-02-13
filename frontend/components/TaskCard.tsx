@@ -62,8 +62,8 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onToggleCom
                 <h3
                   className={`text-lg font-medium truncate ${
                     task.completed 
-                      ? 'line-through text-gray-900 dark:text-gray-500' 
-                      : 'text-gray-900 dark:text-gray-100'
+                      ? 'line-through text-black dark:text-black' 
+                      : 'text-black dark:text-black'
                   }`}
                 >
                   {task.title}
@@ -74,14 +74,14 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onEdit, onDelete, onToggleCom
               </div>
               {task.description && (
                 <p 
-                  className={`mt-2 text-gray-900 dark:text-gray-400 ${
+                  className={`mt-2 text-black dark:text-black ${
                     task.completed ? 'line-through' : ''
                   } truncate`}
                 >
                   {task.description}
                 </p>
               )}
-              <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-gray-900 dark:text-gray-400">
+              <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-black text-black">
                 <span>Created: {new Date(task.createdAt).toLocaleDateString()}</span>
                 {task.updatedAt !== task.createdAt && (
                   <span>

@@ -139,7 +139,7 @@ const TaskDetailPage = () => {
                       <div className="flex justify-between items-start">
                         <div>
                           <h3 className={`text-lg leading-6 font-medium ${
-                            task.completed ? 'line-through text-gray-500' : 'text-gray-900'
+                            task.completed ? 'line-through text-gray-900' : 'text-gray-900'
                           }`}>
                             {task.title}
                           </h3>
