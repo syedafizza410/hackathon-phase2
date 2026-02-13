@@ -27,17 +27,11 @@ const TasksPage = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
 
-  const [statusFilter, setStatusFilter] =
-    useState<'all' | 'active' | 'completed'>('all');
-
-  const [sortOption, setSortOption] =
-    useState<'created_desc' | 'created_asc' | 'title_asc' | 'title_desc'>(
-      'created_desc'
-    );
-
+  const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [sortOption, setSortOption] = useState<'created_desc' | 'created_asc' | 'title_asc' | 'title_desc'>('created_desc');
   const [searchTerm, setSearchTerm] = useState('');
 
-  /* ================= FETCH TASKS ================= */
+  // ================= FETCH TASKS =================
   useEffect(() => {
     const fetchTasks = async () => {
       if (!user) return;
@@ -62,7 +56,7 @@ const TasksPage = () => {
     fetchTasks();
   }, [user, statusFilter, sortOption]);
 
-  /* ================= FILTER + SEARCH ================= */
+  // ================= FILTER + SEARCH =================
   useEffect(() => {
     let result = [...tasks];
 
@@ -71,30 +65,22 @@ const TasksPage = () => {
       result = result.filter(
         task =>
           task.title.toLowerCase().includes(term) ||
-          (task.description &&
-            task.description.toLowerCase().includes(term))
+          (task.description && task.description.toLowerCase().includes(term))
       );
     }
 
-    if (statusFilter === 'active') {
-      result = result.filter(task => !task.completed);
-    } else if (statusFilter === 'completed') {
-      result = result.filter(task => task.completed);
-    }
+    if (statusFilter === 'active') result = result.filter(task => !task.completed);
+    if (statusFilter === 'completed') result = result.filter(task => task.completed);
 
     setFilteredTasks(result);
   }, [tasks, statusFilter, searchTerm]);
 
-  /* ================= CREATE TASK (FIXED) ================= */
+  // ================= TASK HANDLERS =================
   const handleCreateTask = async (data: Partial<Task>) => {
     if (!user || !data.title) return;
 
     try {
-      const res = await api.createTask(user.id, {
-        title: data.title,               // ✅ REQUIRED STRING
-        description: data.description,   // optional
-      });
-
+      const res = await api.createTask(user.id, { title: data.title, description: data.description });
       setTasks(prev => [res.data, ...prev]);
       setShowCreateModal(false);
       showToast('Task created successfully 🎉', 'success');
@@ -103,19 +89,12 @@ const TasksPage = () => {
     }
   };
 
-  /* ================= UPDATE TASK ================= */
   const handleUpdateTask = async (data: Partial<Task>) => {
     if (!user || !editingTask) return;
 
     try {
-      const res = await api.updateTask(user.id, editingTask.id, {
-        title: data.title,
-        description: data.description,
-      });
-
-      setTasks(prev =>
-        prev.map(t => (t.id === editingTask.id ? res.data : t))
-      );
+      const res = await api.updateTask(user.id, editingTask.id, { title: data.title, description: data.description });
+      setTasks(prev => prev.map(t => (t.id === editingTask.id ? res.data : t)));
       setEditingTask(null);
       showToast('Task updated successfully ✅', 'success');
     } catch (err: any) {
@@ -123,11 +102,8 @@ const TasksPage = () => {
     }
   };
 
-  /* ================= DELETE TASK ================= */
   const handleDeleteTask = async (id: number) => {
-    if (!user) return;
-
-    if (!window.confirm('Delete this task?')) return;
+    if (!user || !window.confirm('Delete this task?')) return;
 
     try {
       await api.deleteTask(user.id, id);
@@ -138,15 +114,12 @@ const TasksPage = () => {
     }
   };
 
-  /* ================= TOGGLE COMPLETE ================= */
   const handleToggleComplete = async (id: number, completed: boolean) => {
     if (!user) return;
 
     try {
       const res = await api.toggleTaskCompletion(user.id, id, completed);
-      setTasks(prev =>
-        prev.map(task => (task.id === id ? res.data : task))
-      );
+      setTasks(prev => prev.map(task => (task.id === id ? res.data : task)));
     } catch (err: any) {
       showToast(err.message || 'Failed to update status', 'error');
     }
@@ -154,25 +127,22 @@ const TasksPage = () => {
 
   if (!user) return null;
 
-  /* ================= UI ================= */
+  // ================= UI =================
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-blue-900 to-purple-900 text-white">
       <Navbar />
 
       <main className="h-[calc(100vh-64px)]">
         <div className="grid grid-cols-12 h-full">
-
           {/* ===== LEFT SIDEBAR ===== */}
           <aside className="col-span-12 md:col-span-4 lg:col-span-3 p-6 border-r border-white/10 backdrop-blur-md bg-white/5">
             <h1 className="text-3xl font-bold mb-6">Your Tasks</h1>
 
-            <Button
-              className="w-full mb-6"
-              onClick={() => setShowCreateModal(true)}
-            >
+            <Button className="w-full mb-6" onClick={() => setShowCreateModal(true)}>
               + Add New Task
             </Button>
 
+            {/* ===== FILTER CONTROLS ===== */}
             <FilterControls
               statusFilter={statusFilter}
               sortOption={sortOption}
@@ -193,15 +163,9 @@ const TasksPage = () => {
               </div>
             ) : filteredTasks.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center">
-                <h2 className="text-2xl font-semibold mb-2">
-                  No Tasks Yet 🚀
-                </h2>
-                <p className="text-white/70 mb-6">
-                  Create your first task and stay productive
-                </p>
-                <Button onClick={() => setShowCreateModal(true)}>
-                  Create Task
-                </Button>
+                <h2 className="text-2xl font-semibold mb-2">No Tasks Yet 🚀</h2>
+                <p className="text-white/70 mb-6">Create your first task and stay productive</p>
+                <Button onClick={() => setShowCreateModal(true)}>Create Task</Button>
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -221,28 +185,13 @@ const TasksPage = () => {
       </main>
 
       {/* ===== MODALS ===== */}
-      <Modal
-        isOpen={showCreateModal}
-        onClose={() => setShowCreateModal(false)}
-        title="Create Task"
-      >
-        <TaskForm
-          onSubmit={handleCreateTask}
-          onCancel={() => setShowCreateModal(false)}
-        />
+      <Modal isOpen={showCreateModal} onClose={() => setShowCreateModal(false)} title="Create Task">
+        <TaskForm onSubmit={handleCreateTask} onCancel={() => setShowCreateModal(false)} />
       </Modal>
 
       {editingTask && (
-        <Modal
-          isOpen
-          onClose={() => setEditingTask(null)}
-          title="Edit Task"
-        >
-          <TaskForm
-            initialData={editingTask}
-            onSubmit={handleUpdateTask}
-            onCancel={() => setEditingTask(null)}
-          />
+        <Modal isOpen onClose={() => setEditingTask(null)} title="Edit Task">
+          <TaskForm initialData={editingTask} onSubmit={handleUpdateTask} onCancel={() => setEditingTask(null)} />
         </Modal>
       )}
     </div>

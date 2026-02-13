@@ -1,4 +1,5 @@
-// components/FilterControls.tsx
+'use client';
+
 import React from 'react';
 import Input from './Input';
 import { TaskStatus, TaskSortOption } from '@/types';
@@ -22,45 +23,48 @@ const FilterControls: React.FC<FilterControlsProps> = ({
 }) => {
   return (
     <div className="mb-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* ===== Line 1: Search ===== */}
+      <div className="mb-4">
+        <label htmlFor="search-input" className="block text-sm font-medium mb-2 text-white">
+          Search tasks
+        </label>
+        <Input
+          id="search-input"
+          type="text"
+          value={searchTerm}
+          onChange={(e) => onSearchChange(e.target.value)}
+          placeholder="Search by title or description..."
+          className="w-full text-black bg-white rounded-md px-3 py-2"
+        />
+      </div>
+
+      {/* ===== Line 2: Filter by Status + Sort ===== */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="search-input" className="block text-sm font-medium mb-2">
-            Search tasks
-          </label>
-          <Input
-            id="search-input"
-            type="text"
-            value={searchTerm}
-            onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search by title or description..."
-          />
-        </div>
-        
-        <div>
-          <label htmlFor="status-filter" className="block text-sm font-medium mb-2">
+          <label htmlFor="status-filter" className="block text-sm font-medium mb-2 text-white">
             Filter by status
           </label>
           <select
             id="status-filter"
             value={statusFilter}
             onChange={(e) => onStatusChange(e.target.value as TaskStatus)}
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-2 text-sm"
           >
             <option value="all">All Tasks</option>
             <option value="active">Active</option>
             <option value="completed">Completed</option>
           </select>
         </div>
-        
+
         <div>
-          <label htmlFor="sort-option" className="block text-sm font-medium mb-2">
+          <label htmlFor="sort-option" className="block text-sm font-medium mb-2 text-white">
             Sort by
           </label>
           <select
             id="sort-option"
             value={sortOption}
             onChange={(e) => onSortChange(e.target.value as TaskSortOption)}
-            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-md border border-gray-300 bg-white text-gray-700 px-3 py-2 text-sm"
           >
             <option value="created_desc">Newest First</option>
             <option value="created_asc">Oldest First</option>
